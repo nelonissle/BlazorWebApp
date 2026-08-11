@@ -37,21 +37,15 @@
             <a class="button button-secondary" href="/liste">Listendarstellung öffnen</a>
         </div>
 
-        @if (!string.IsNullOrWhiteSpace(StatusMessage))
-        {
-            <p class="status-message">@StatusMessage</p>
-        }
     </EditForm>
 </section>
 
 @code {
     private SaveUp.ViewModels.EntryFormViewModel ViewModel { get; set; } = new();
-    private string? StatusMessage { get; set; }
 
     private async Task SaveAsync()
     {
         await Repository.AddEntryAsync(ViewModel.ToEntry());
-        StatusMessage = "Der Verzichtskauf wurde gespeichert.";
         ViewModel.Reset();
         NavigationManager.NavigateTo("/liste");
     }
