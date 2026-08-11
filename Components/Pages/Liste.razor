@@ -1,0 +1,56 @@
+﻿@page "/liste"
+@rendermode InteractiveServer
+@inject SaveUp.Services.SaveUpRepository Repository
+
+<PageTitle>SaveUp | Sparliste</PageTitle>
+
+<div class="page-header">
+    <div>
+        <p class="eyebrow">Sparliste</p>
+        <h2>Alle gespeicherten Verzichtskäufe auf einen Blick.</h2>
+    </div>
+    <a class="button button-secondary" href="/erfassen">Neuen Eintrag hinzufügen</a>
+</div>
+
+<section class="panel">
+    <div class="summary-banner">
+        <span>Aktuelle Gesamteinsparung</span>
+        <strong>CHF @ViewModel.TotalAmount.ToString("N2")</strong>
+    </div>
+
+    @if (ViewModel.Entries.Count == 0)
+    {
+        <p>Noch keine gespeicherten Verzichtskäufe vorhanden.</p>
+    }
+    else
+    {
+        <table class="savings-table">
+            <thead>
+                <tr>
+                    <th>Kurzbeschreibung</th>
+                    <th>Preis</th>
+                    <th>Datum / Uhrzeit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var entry in ViewModel.Entries)
+                {
+                    <tr>
+                        <td>@entry.Description</td>
+                        <td>CHF @entry.Price.ToString("N2")</td>
+                        <td>@entry.SkippedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@code {
+    private SaveUp.ViewModels.SavingsListViewModel ViewModel { get; set; } = SaveUp.ViewModels.SavingsListViewModel.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel = SaveUp.ViewModels.SavingsListViewModel.FromEntries(await Repository.GetEntriesAsync());
+    }
+}

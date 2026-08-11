@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <p class="brand-kicker">Blazor application</p>
+                <h1>SaveUp</h1>
+            </div>
+        </div>
+
+        <NavMenu />
+    </aside>
+
+    <main class="content">
+        <header class="top-bar">
+            <p>Erfasse jeden Verzichtskauf und behalte deine Gesamtersparnis im Blick.</p>
+        </header>
+
+        <section class="content-body">
+            @Body
+        </section>
+    </main>
+</div>
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss" role="button" tabindex="0" aria-label="Dismiss">🗙</a>
+</div>
