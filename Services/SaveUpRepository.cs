@@ -7,6 +7,8 @@ public sealed class SaveUpRepository
 {
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         WriteIndented = true
     };
 
