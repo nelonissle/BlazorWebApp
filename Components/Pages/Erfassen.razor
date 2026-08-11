@@ -1,0 +1,58 @@
+﻿@page "/erfassen"
+@rendermode InteractiveServer
+@inject SaveUp.Services.SaveUpRepository Repository
+@inject NavigationManager NavigationManager
+
+<PageTitle>SaveUp | Eintrag erfassen</PageTitle>
+
+<div class="page-header">
+    <div>
+        <p class="eyebrow">Eintrag erfassen</p>
+        <h2>Was hast du heute bewusst nicht gekauft?</h2>
+    </div>
+</div>
+
+<section class="panel">
+    <EditForm Model="ViewModel" OnValidSubmit="SaveAsync" class="entry-form">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <label>
+            Kurzbeschreibung
+            <InputText @bind-Value="ViewModel.Description" />
+        </label>
+
+        <label>
+            Preis in CHF
+            <InputNumber @bind-Value="ViewModel.Price" />
+        </label>
+
+        <label>
+            Datum und Uhrzeit
+            <InputDate @bind-Value="ViewModel.SkippedAt" Type="InputDateType.DateTimeLocal" />
+        </label>
+
+        <div class="action-row">
+            <button class="button button-primary" type="submit">Speichern</button>
+            <a class="button button-secondary" href="/liste">Listendarstellung öffnen</a>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(StatusMessage))
+        {
+            <p class="status-message">@StatusMessage</p>
+        }
+    </EditForm>
+</section>
+
+@code {
+    private SaveUp.ViewModels.EntryFormViewModel ViewModel { get; set; } = new();
+    private string? StatusMessage { get; set; }
+
+    private async Task SaveAsync()
+    {
+        await Repository.AddEntryAsync(ViewModel.ToEntry());
+        StatusMessage = "Der Verzichtskauf wurde gespeichert.";
+        ViewModel.Reset();
+        NavigationManager.NavigateTo("/liste");
+    }
+}

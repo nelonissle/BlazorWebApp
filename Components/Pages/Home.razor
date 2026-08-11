@@ -1,0 +1,47 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@inject SaveUp.Services.SaveUpRepository Repository
+
+<PageTitle>SaveUp | Übersicht</PageTitle>
+
+<div class="page-header">
+    <div>
+        <p class="eyebrow">Übersicht</p>
+        <h2>Dein Sparziel beginnt mit kleinen Verzichtskäufen.</h2>
+    </div>
+    <a class="button button-primary" href="/erfassen">Jetzt Eintrag erfassen</a>
+</div>
+
+<div class="stats-grid">
+    <article class="stat-card">
+        <span>Gesamteinsparung</span>
+        <strong>CHF @ViewModel.TotalAmount.ToString("N2")</strong>
+    </article>
+    <article class="stat-card">
+        <span>Verzichtskäufe</span>
+        <strong>@ViewModel.EntryCount</strong>
+    </article>
+    <article class="stat-card">
+        <span>Letzter Eintrag</span>
+        <strong>@ViewModel.LastSavedAtLabel</strong>
+    </article>
+</div>
+
+<section class="panel">
+    <h3>So funktioniert SaveUp</h3>
+    <ol class="feature-list">
+        <li>Erfasse die Kurzbeschreibung, den Preis und den Zeitpunkt des Verzichts.</li>
+        <li>Speichere jeden Eintrag direkt in einer lokalen JSON-Datei.</li>
+        <li>Prüfe deine Sparliste und den aktuellen Gesamtbetrag jederzeit.</li>
+    </ol>
+</section>
+
+@code {
+    private SaveUp.ViewModels.DashboardViewModel ViewModel { get; set; } = SaveUp.ViewModels.DashboardViewModel.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var entries = await Repository.GetEntriesAsync();
+        ViewModel = SaveUp.ViewModels.DashboardViewModel.FromEntries(entries);
+    }
+}
